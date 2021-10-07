@@ -1,0 +1,14 @@
+#!/usr/bin/env node
+const { execSync } = require('child_process')
+const { cwd } = require('process')
+
+const { containers } = require(`${cwd()}/containers/manifest.json`)
+
+// 循环推送
+for (const container of containers) {
+  const image = `ghcr.io/coajs/${container}`
+  console.warn()
+  console.warn(`开始推送 ${image}`)
+  console.warn()
+  execSync(`docker image push --all-tags ${image}`, { stdio: 'inherit' })
+}
