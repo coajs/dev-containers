@@ -6,21 +6,20 @@ on:
 
 jobs:
   sync:
-
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        
+
       - name: Login
         run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u adaex --password-stdin
-        
+
       - name: Setup
         run: script/setup
-        
+
       - name: Build
         run: script/build
-        
+
       - name: Push
         run: script/push
