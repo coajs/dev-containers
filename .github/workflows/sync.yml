@@ -2,7 +2,7 @@ name: Sync
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 * * * *'
 
 jobs:
   sync:
@@ -18,8 +18,5 @@ jobs:
       - name: Setup
         run: script/setup
 
-      - name: Build
-        run: script/build
-
-      - name: Push
-        run: script/push
+      - name: Sync
+        run: script/sync
