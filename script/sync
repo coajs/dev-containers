@@ -1,0 +1,77 @@
+#!/usr/bin/env node
+const { execSync } = require('child_process')
+const { writeFileSync } = require('fs')
+const { cwd } = require('process')
+
+// 获取所有的container
+const { containers } = require(`${cwd()}/containers/manifest.json`)
+
+// 循环处理
+for (const container of containers) {
+  // 获取信息
+  const { variants, version } = checkManifest(container)
+  if (variants.length === 0 || version === '') continue
+
+  // 构建
+  for (variant of variants) {
+    const file = `containers/${container}/Dockerfile`
+    const tag = `ghcr.io/coajs/${container}:${variant}`
+    echo(`开始构建 ${tag}`)
+    exec(`docker build -f ${file} -t ${tag} --build-arg VARIANT=${variant} .`)
+  }
+  // 推送
+  const image = `ghcr.io/coajs/${container}`
+  echo(`开始推送 ${image}`)
+  exec(`docker image push --all-tags ${image}`, { stdio: 'inherit' })
+
+  // 提交
+  echo(`开始提交更新`)
+  exec(`git config --global user.name Aex`)
+  exec(`git config --global user.email adaex@qq.com`)
+  exec(`git add .`)
+  exec(`git commit -m "sync: ${container} to ${version}"`)
+  exec(`git push`)
+}
+
+// 获取所有的 variant
+function checkManifest(container) {
+  const definition = require(`${cwd()}/containers/${container}/definition-manifest.json`)
+  const manifest = require(`${cwd()}/${definition.manifest}`)
+  // 无需更新
+  if (definition.version === manifest.definitionVersion) {
+    return { variants: [], version: '' }
+  }
+  const variants = ['latest']
+  const definitionVariants = [...definition.variants]
+  const definitionVersion = manifest.definitionVersion
+  for (const variant of definitionVariants.sort()) {
+    variants.push(variant)
+    const prev = []
+    for (const version of definitionVersion.split('.')) {
+      prev.push(version)
+      variants.push(`${prev.join('.')}-${variant}`)
+    }
+  }
+  // 写入文件
+  definition.version = definitionVersion
+  writeFileSync(
+    `${cwd()}/containers/${container}/definition-manifest.json`,
+    JSON.stringify(definition, undefined, 2) + '\n'
+  )
+  return { variants: variants.reverse(), version: definition.version }
+}
+
+function echo(message) {
+  console.info()
+  console.info(message)
+  console.info()
+}
+
+function exec(cmd) {
+  try {
+    execSync(cmd, { stdio: 'inherit' })
+  } catch (e) {
+    console.error(e.toString())
+    process.exit(1)
+  }
+}
