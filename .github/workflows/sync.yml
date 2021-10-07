@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Login
-        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u adaex --password-stdin
+        run: echo ${{ secrets.AEX_TOKEN }} | docker login ghcr.io -u adaex --password-stdin
 
       - name: Setup
         run: script/setup
