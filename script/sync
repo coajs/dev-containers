@@ -26,8 +26,6 @@ for (const container of containers) {
 
   // 提交
   echo(`开始提交更新`)
-  exec(`git config --global user.name Aex`)
-  exec(`git config --global user.email adaex@qq.com`)
   exec(`git add .`)
   exec(`git commit -m "sync: ${container} to ${version}"`)
   exec(`git push`)

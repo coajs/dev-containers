@@ -12,8 +12,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Login
-        run: echo ${{ secrets.AEX_TOKEN }} | docker login ghcr.io -u adaex --password-stdin
+      - name: Init
+        run: |
+          echo ${{ secrets.AEX_TOKEN }} | docker login ghcr.io -u adaex --password-stdin
+          git config --global user.name Aex
+          git config --global user.email adaex@qq.com
 
       - name: Setup
         run: script/setup
