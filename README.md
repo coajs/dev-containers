@@ -6,7 +6,7 @@ Learn more from: https://github.com/microsoft/vscode-dev-containers
 
 ## javascript-node
 
-_Develop Node.js based applications. Includes Node.js, eslint, nvm, yarn, and pnpm._
+_Develop Node.js based applications. Includes Node.js, eslint, nvm, and yarn._
 
 | Metadata                          | Value                                                                                                                                                                            |
 | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
