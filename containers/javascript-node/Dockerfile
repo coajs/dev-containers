@@ -2,15 +2,7 @@
 
 # [Choice] Node.js version (use -bullseye variants on local arm64/Apple Silicon): 16, 14, 12, 16-bullseye, 14-bullseye, 12-bullseye, 16-buster, 14-buster, 12-buster
 ARG VARIANT=16-bullseye
-FROM ghcr.io/coajs/javascript-node:${VARIANT}
-
-# Docker-from-Docker Install Script
-# https://github.com/microsoft/vscode-dev-containers/blob/main/script-library/docs/docker.md
-COPY vscode-dev-containers/script-library/docker-debian.sh /tmp/library-scripts/docker-debian.sh
-ENV DOCKER_BUILDKIT=1
-RUN apt-get update && bash /tmp/library-scripts/docker-debian.sh
-ENTRYPOINT ["/usr/local/share/docker-init.sh"]
-CMD ["sleep", "infinity"]
+FROM mcr.microsoft.com/vscode/devcontainers/javascript-node:${VARIANT}
 
 # [Optional] Uncomment this section to install additional OS packages.
 # RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
@@ -22,3 +14,4 @@ CMD ["sleep", "infinity"]
 
 # [Optional] Uncomment if you want to install more global node modules
 # RUN su node -c "npm install -g <your-package-list-here>"
+RUN su node -c "npm install -g pnpm"
