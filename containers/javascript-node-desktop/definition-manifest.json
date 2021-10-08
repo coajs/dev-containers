@@ -1,0 +1,15 @@
+{
+  "version": "0",
+  "manifest": "vscode-dev-containers/containers/javascript-node/definition-manifest.json",
+  "variants": [
+    "16-bullseye",
+    "14-bullseye",
+    "12-bullseye",
+    "16-buster",
+    "14-buster",
+    "12-buster",
+    "16",
+    "14",
+    "12"
+  ]
+}

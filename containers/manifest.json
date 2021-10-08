@@ -1,3 +1,7 @@
 {
-  "containers": ["javascript-node", "javascript-node-docker"]
+  "containers": [
+    "javascript-node",
+    "javascript-node-desktop",
+    "javascript-node-docker"
+  ]
 }
