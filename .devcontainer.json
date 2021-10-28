@@ -4,6 +4,13 @@
   "name": "DEV",
   "image": "ghcr.io/coajs/javascript-node-docker",
   "remoteUser": "node",
+  "runArgs": [
+    "--init"
+  ],
+  "overrideCommand": false,
+  "mounts": [
+    "source=/var/run/docker.sock,target=/var/run/docker-host.sock,type=bind"
+  ],
   "extensions": [
     "mutantdino.resourcemonitor",
     "github.vscode-pull-request-github",
