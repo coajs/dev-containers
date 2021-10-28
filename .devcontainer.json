@@ -2,7 +2,7 @@
 // https://github.com/microsoft/vscode-dev-containers/tree/main/containers/javascript-node
 {
   "name": "DEV",
-  "image": "ghcr.io/coajs/javascript-node",
+  "image": "ghcr.io/coajs/javascript-node-docker",
   "remoteUser": "node",
   "extensions": [
     "mutantdino.resourcemonitor",
