@@ -1,5 +1,5 @@
 {
-  "version": "0.203.0",
+  "version": "0.203.1",
   "manifest": "vscode-dev-containers/containers/javascript-node/definition-manifest.json",
   "variants": [
     "16-bullseye",
