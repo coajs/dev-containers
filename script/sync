@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 const { execSync } = require('child_process')
-const { writeFileSync } = require('fs')
+const { writeFileSync, rmSync } = require('fs')
 const { cwd } = require('process')
 
 // 获取所有的container
@@ -8,12 +8,15 @@ const { containers } = require(`${cwd()}/containers/manifest.json`)
 
 // 循环处理
 for (const container of containers) {
+  echo(`开始处理: ${container}`)
+
   // 获取信息
-  const { variants, version } = checkManifest(container)
+  const { variants, version, tags } = checkManifest(container)
   if (variants.length === 0 || version === '') continue
 
   // 构建
   for (variant of variants) {
+    if (tags && !tags.includes(variant)) continue
     const file = `containers/${container}/Dockerfile`
     const tag = `ghcr.io/coajs/${container}:${variant}`
     echo(`开始构建 ${tag}`)
@@ -56,7 +59,27 @@ function checkManifest(container) {
     `${cwd()}/containers/${container}/definition-manifest.json`,
     JSON.stringify(definition, undefined, 2) + '\n'
   )
-  return { variants: variants.reverse(), version: definition.version }
+
+  // 下载tags列表
+  if (definition.tags) {
+    const file = `${container}-${Math.random()}.json`
+    exec(`wget ${tags} -O file`)
+    definition.tags = require(file).tags || []
+    rmSync(file, { recursive: true })
+  }
+
+  return {
+    variants: variants.reverse(),
+    version: definition.version,
+    tags: definition.tags,
+  }
+}
+
+function fetchTagsList(container, url) {
+  if (!url) return
+  const file = `tmp/${container}.json`
+  exec(`wget ${tags} -O file`)
+  return require(file).tags || []
 }
 
 function echo(message) {
